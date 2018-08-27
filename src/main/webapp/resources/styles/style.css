@@ -1,0 +1,90 @@
+th {
+    cursor: pointer;
+}
+
+th:hover {
+    background: yellow;
+}
+
+#test-list{
+    width: 1000px;
+    margin-left: auto;
+    margin-right: 150px;
+    text-align: center;
+    float: right;
+}
+
+#add_test{
+    width: 200px;
+    margin: auto;
+    text-align: left;
+    float: left;
+    margin-left: 100px;
+}
+
+#create{
+    width: 800px;
+    text-align: left;
+    margin: auto;
+}
+#timer {
+    width: 400px;
+    margin: auto;
+}
+#add-test-body {
+    width: 500px;
+    margin: auto;
+    background-color: yellow;
+    padding: 10px;
+    border-radius: 10px;
+}
+#update-test-body{
+    width: 510px;
+    margin: auto;
+    background-color: yellow;
+    padding: 10px;
+    border-radius: 10px;
+}
+#questions{
+    margin-right: auto;
+}
+
+#clock{
+    width: 100px;
+}
+
+#test{
+    width: 500px;
+    margin: auto;
+    background-color: yellow;
+    padding: 10px;
+    border-radius: 10px;
+}
+#info{
+    width: 500px;
+    padding: 10px;
+    margin: auto;
+    background: yellow;
+    border: thin;
+    border-radius: 10px;
+    border-color: white;
+}
+
+#users-list{
+    width: 1000px;
+    margin: auto;
+    position: relative;
+}
+#results-list{
+    width: 1000px;
+    margin: auto;
+    position: relative;
+}
+#page_message {
+    width: 500px;
+    margin: auto;
+}
+
+.input-test{
+    width: 450px;
+}

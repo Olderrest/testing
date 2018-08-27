@@ -1,0 +1,117 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="com.springapp.testing"/>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <tx:annotation-driven/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/testing"/>
+        <property name="username" value="user"/>
+        <property name="password" value="password"/>
+    </bean>
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>com.springapp.testing.model.Role</value>
+                <value>com.springapp.testing.model.User</value>
+                <value>com.springapp.testing.model.Test</value>
+                <value>com.springapp.testing.model.Model</value>
+                <value>com.springapp.testing.model.Result</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQL9Dialect</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--<bean name="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">-->
+        <!--<property name="basename" value="classpath*:messages"/>-->
+    <!--</bean>-->
+
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="en" />
+        <property name="cookieName" value="myAppLocaleCookie"/>
+        <property name="cookieMaxAge" value="3600"/>
+    </bean>
+
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/*" />
+            <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+                <property name="paramName" value="languageVar" />
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="roleDao" class="com.springapp.testing.dao.impls.RoleDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="userDao" class="com.springapp.testing.dao.impls.UserDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="roleService" ref="roleService"/>
+    </bean>
+
+    <bean id="testDao" class="com.springapp.testing.dao.impls.TestDaoImpl" >
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="resultDao" class="com.springapp.testing.dao.impls.ResultDaoImpl">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+
+    <bean id="roleService" class="com.springapp.testing.services.impls.RoleServiceImpl">
+        <property name="roleDao" ref="roleDao"/>
+    </bean>
+
+    <bean id="userService" class="com.springapp.testing.services.impls.UserServiceImpl">
+        <property name="userDao" ref="userDao"/>
+    </bean>
+
+    <bean id="testService" class="com.springapp.testing.services.impls.TestServiceImpl">
+        <property name="testDao" ref="testDao"/>
+    </bean>
+
+    <bean id="resultService" class="com.springapp.testing.services.impls.ResultServiceImpl">
+        <property name="resultDao" ref="resultDao"/>
+        <property name="testService" ref="testService"/>
+    </bean>
+
+    <bean id="checkBoxValidator" class="com.springapp.testing.utils.CheckBoxValidator"/>
+
+
+    <mvc:default-servlet-handler/>
+    <mvc:annotation-driven/>
+</beans>
